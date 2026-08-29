@@ -1,11 +1,11 @@
 -- ============================================================================
--- APEXFIT GYM MANAGEMENT & MEMBER PORTAL DATABASE SCHEMA (MySQL)
+-- SVS FITNESS GYM MANAGEMENT & MEMBER PORTAL DATABASE SCHEMA (MySQL)
 -- ============================================================================
 
 CREATE DATABASE IF NOT EXISTS gym_db;
 USE gym_db;
 
--- 1. Users Table (Members, Trainers, Admins)
+-- 1. Users Table (Members, Trainers, Admins/Owners)
 CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
     gender ENUM('Male', 'Female', 'Other') DEFAULT 'Male',
     date_of_birth DATE,
     profile_image_url VARCHAR(255),
-    role ENUM('member', 'trainer', 'admin') DEFAULT 'member',
+    role ENUM('member', 'trainer', 'owner', 'admin') DEFAULT 'member',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS trainers (
     bio TEXT,
     experience_years INT DEFAULT 3,
     rating DECIMAL(2,1) DEFAULT 5.0,
-    hourly_rate DECIMAL(10,2) DEFAULT 40.00,
+    hourly_rate DECIMAL(10,2) DEFAULT 500.00,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
@@ -136,28 +136,26 @@ CREATE TABLE IF NOT EXISTS diet_logs (
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
 
--- Sample Data Fixtures
+-- Seed Data Fixtures (SVS Fitness)
 INSERT INTO membership_plans (name, description, price_monthly, duration_months, features) VALUES
-('Starter Bronze', 'Perfect for gym beginners looking for standard equipment access.', 29.99, 1, '["Access to gym floor", "Locker room access", "1 Free fitness assessment", "Mobile App Tracking"]'),
-('Pro Silver', 'Most popular tier for consistent fitness enthusiasts.', 49.99, 1, '["All Bronze features", "Unlimited Group Classes (Yoga, HIIT, Zumba)", "Sauna & Steam Bath", "Guest pass 1x/month", "Nutritional Guide"]'),
-('Elite Gold', 'All-inclusive premium fitness and recovery experience.', 79.99, 1, '["All Silver features", "2x 1-on-1 Personal Trainer Sessions/mo", "Hydro-Massage & Recovery Lounge", "Free Whey Protein Shake on each visit", "Custom Diet & Workout Blueprint"]');
+('Starter Bronze', 'Standard gym equipment and locker access.', 1199.00, 1, '["Access to gym floor", "Locker room access", "1 Free fitness assessment", "SVS Mobile App Tracking"]'),
+('Pro Silver', 'Most popular tier for consistent fitness enthusiasts.', 1999.00, 1, '["All Bronze features", "Unlimited Group Classes (Yoga, HIIT, Zumba)", "Sauna & Steam Bath", "Guest pass 1x/month", "Nutritional Guide"]'),
+('SVS Elite Gold VIP', 'All-inclusive premium fitness and recovery experience.', 2999.00, 1, '["All Silver features", "2x 1-on-1 Personal Trainer Sessions/mo", "Hydro-Massage & Recovery Lounge", "Free Whey Protein Shake on each visit", "Custom Diet & Workout Blueprint"]');
 
 INSERT INTO users (full_name, email, password_hash, phone, gender, role) VALUES
-('Marcus Vance', 'marcus.trainer@apexfit.com', '$2a$10$e8wZ3o9Yj8q9b9F.samplehash', '+1-555-0101', 'Male', 'trainer'),
-('Elena Rostova', 'elena.trainer@apexfit.com', '$2a$10$e8wZ3o9Yj8q9b9F.samplehash', '+1-555-0102', 'Female', 'trainer'),
-('Alex Reynolds', 'alex.member@apexfit.com', '$2a$10$e8wZ3o9Yj8q9b9F.samplehash', '+1-555-0199', 'Male', 'member');
+('SVS Admin / Owner', 'owner@svsfitness.com', '$2a$10$e8wZ3o9Yj8q9b9F.samplehash', '+91 99999 88888', 'Male', 'owner'),
+('Marcus Vance', 'marcus.trainer@svsfitness.com', '$2a$10$e8wZ3o9Yj8q9b9F.samplehash', '+91 98765 01010', 'Male', 'trainer'),
+('Elena Rostova', 'elena.trainer@svsfitness.com', '$2a$10$e8wZ3o9Yj8q9b9F.samplehash', '+91 98765 01020', 'Female', 'trainer'),
+('Alex Reynolds', 'alex.member@svsfitness.com', '$2a$10$e8wZ3o9Yj8q9b9F.samplehash', '+91 98765 43210', 'Male', 'member');
 
 INSERT INTO trainers (user_id, specialization, experience_years, rating, hourly_rate, bio) VALUES
-(1, 'Heavy Strength & Powerlifting', 8, 4.9, 50.00, 'Certified CSCS coach specialized in barbell mechanics, athletic conditioning, and progressive overload.'),
-(2, 'HIIT, Mobility & Core Conditioning', 6, 5.0, 45.00, 'Passionate endurance trainer bringing high energy and fat-burning metabolic conditioning classes.');
+(2, 'Heavy Strength & Powerlifting', 8, 4.9, 800.00, 'Certified CSCS coach at SVS Fitness specialized in barbell mechanics and athletic conditioning.'),
+(3, 'HIIT, Mobility & Core Conditioning', 6, 5.0, 750.00, 'Passionate endurance trainer bringing high energy and fat-burning metabolic conditioning classes.');
 
 INSERT INTO fitness_classes (trainer_id, title, category, start_time, end_time, day_of_week, max_capacity, intensity_level, room_number) VALUES
 (1, 'Heavy Iron Barbell Mastery', 'Strength', '07:00:00', '08:00:00', 'Monday', 15, 'Advanced', 'Power Zone'),
 (2, 'Metabolic Burn HIIT Inferno', 'HIIT', '08:30:00', '09:15:00', 'Monday', 20, 'Intermediate', 'Studio A'),
-(2, 'Sunrise Vinyasa Yoga Flow', 'Yoga', '06:30:00', '07:30:00', 'Wednesday', 25, 'All Levels', 'Zen Studio'),
-(1, 'Hypertrophy Legs & Glutes Workshop', 'Strength', '18:00:00', '19:00:00', 'Thursday', 18, 'Intermediate', 'Main Gym Floor'),
-(2, 'Endurance Spin Cycle Rush', 'Spinning', '19:30:00', '20:15:00', 'Friday', 22, 'Advanced', 'Spin Studio');
+(2, 'Sunrise Vinyasa Yoga Flow', 'Yoga', '06:30:00', '07:30:00', 'Wednesday', 25, 'All Levels', 'Zen Studio');
 
 INSERT INTO member_subscriptions (user_id, plan_id, start_date, end_date, status, qr_code_token) VALUES
-(3, 3, '2026-08-01', '2026-09-01', 'active', 'APEX-QR-MEMBER-3-GOLD-8899');
-
+(4, 3, '2026-08-01', '2026-09-01', 'active', 'SVS-MEMBER-8829-GOLD');

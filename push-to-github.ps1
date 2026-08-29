@@ -1,20 +1,15 @@
-# Push SVS Fitness to your GitHub Repository
+# One-Click Push Script for SVS Fitness to GitHub
 
-$gitExe = "C:\Program Files\Git\cmd\git.exe"
-if (-not (Test-Path $gitExe)) {
-    $gitExe = "git"
-}
+$gitExe = "c:\Users\HP\Desktop\web development\mingit\cmd\git.exe"
 
-cd "c:\Users\HP\Desktop\web development\gym-portal"
+Write-Host "==========================================" -ForegroundColor Cyan
+Write-Host " PUSHING SVS FITNESS TO GITHUB..." -ForegroundColor Yellow
+Write-Host " Repository: https://github.com/sumathc2004/svs-fitness.git" -ForegroundColor Cyan
+Write-Host "==========================================" -ForegroundColor Cyan
 
-Write-Host "Initializing Git Repository..." -ForegroundColor Cyan
-& $gitExe init
-& $gitExe add .
-& $gitExe commit -m "Initial commit for SVS Fitness Full-Stack Portal"
+& $gitExe remote remove origin 2>$null
+& $gitExe remote add origin https://github.com/sumathc2004/svs-fitness.git
 & $gitExe branch -M main
 
-Write-Host "`nReady to push!" -ForegroundColor Green
-Write-Host "Run the following commands with your repository URL:" -ForegroundColor Yellow
-Write-Host "git remote add origin https://github.com/YOUR_USERNAME/svs-fitness.git"
-Write-Host "git push -u origin main"
-
+Write-Host "`nRunning push... If prompted, please click 'Sign in with your browser'!" -ForegroundColor Green
+& $gitExe push -u origin main
