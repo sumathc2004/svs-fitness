@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVS FITNESS // Member Portal & Admin Management Hub</title>
+    <!-- Modern Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Ambient Dynamic Lighting & Glows -->
+    <div class="ambient-glow glow-top-left"></div>
+    <div class="ambient-glow glow-bottom-right"></div>
+    <div class="ambient-grid"></div>
+
+    <!-- Main Application Container -->
+    <div class="app-layout">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand-container">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-dumbbell"></i>
+                </div>
+                <div class="brand-text">
+                    <h2>SVS <span>FITNESS</span></h2>
+                    <span class="portal-badge" id="portal-sub-badge">GYM PORTAL</span>
+                </div>
+            </div>
+
+            <!-- Role Selector / Switcher Switch -->
+            <div class="role-switcher-card">
+                <div class="role-label-group">
+                    <span class="role-title"><i class="fa-solid fa-user-gear"></i> ACTIVE ROLE</span>
+                    <span class="role-tag member-tag" id="current-role-badge">Member</span>
+                </div>
+                <div class="role-btn-group">
+                    <button class="role-btn active" id="role-btn-member" onclick="switchRole('member')">
+                        <i class="fa-solid fa-user"></i> Member
+                    </button>
+                    <button class="role-btn" id="role-btn-owner" onclick="switchRole('owner')">
+                        <i class="fa-solid fa-crown"></i> Owner/Admin
+                    </button>
+                </div>
+            </div>
+
+            <!-- Member / Admin Profile Card in Sidebar -->
+            <div class="sidebar-member-card">
+                <div class="avatar-ring">
+                    <img id="sidebar-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Avatar">
+                    <span class="online-indicator"></span>
+                </div>
+                <div class="member-info">
+                    <h4 id="sidebar-member-name">Alex Reynolds</h4>
+                    <span class="tier-pill tier-gold" id="sidebar-tier-badge">
+                        <i class="fa-solid fa-crown"></i> Elite Gold Member
+                    </span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="nav-menu">
+                <!-- Member Navigation (Visible in Member Role) -->
+                <div class="nav-section-group member-nav-group">
+                    <button class="nav-item active" data-tab="dashboard">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Member Dashboard</span>
+                    </button>
+                    <button class="nav-item" data-tab="workout">
+                        <i class="fa-solid fa-dumbbell"></i>
+                        <span>Workout Planner</span>
+                    </button>
+                    <button class="nav-item" data-tab="classes">
+                        <i class="fa-solid fa-calendar-check"></i>
+                        <span>Class Booking</span>
+                        <span class="nav-badge" id="classes-count-badge">5</span>
+                    </button>
+                    <button class="nav-item" data-tab="diet">
+                        <i class="fa-solid fa-apple-whole"></i>
+                        <span>Diet & Nutrition</span>
+                    </button>
+                    <button class="nav-item" data-tab="plans">
+                        <i class="fa-solid fa-id-card"></i>
+                        <span>Membership Plans</span>
+                    </button>
+                    <button class="nav-item" data-tab="calculator">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span>Fitness Calculator</span>
+                    </button>
+                </div>
+
+                <!-- Owner / Admin Navigation (Visible in Owner Role) -->
+                <div class="nav-section-group owner-nav-group" style="display: none;">
+                    <button class="nav-item" data-tab="owner-dashboard">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <span>Gym Overview & Revenue</span>
+                    </button>
+                    <button class="nav-item" data-tab="owner-members">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage Members (184)</span>
+                    </button>
+                    <button class="nav-item" data-tab="owner-classes">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                        <span>Manage Classes & Slots</span>
+                    </button>
+                    <button class="nav-item" data-tab="backend-docs">
+                        <i class="fa-solid fa-server"></i>
+                        <span>Backend API & DB Access</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Developer Path Badge & Info Footer -->
+            <div class="sidebar-footer">
+                <div class="dev-path-box">
+                    <div class="dev-tag"><i class="fa-solid fa-code"></i> SVS FITNESS FULL STACK</div>
+                    <p>React/Next.js • Node/Express • MySQL</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-viewport">
+            
+            <!-- Top Navbar / Header Bar -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="mobile-toggle">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="header-titles">
+                        <h1 id="page-title">SVS Fitness Member Dashboard</h1>
+                        <p id="page-subtitle">Welcome back, athlete! Track your progress and achieve your goals.</p>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <div class="backend-status-pill" id="backend-status-pill" title="Status of Node.js Express Backend">
+                        <span class="pulse-dot"></span>
+                        <span id="backend-status-text">Backend API (Port 5000)</span>
+                    </div>
+                    <div class="digital-clock" id="live-clock">19:30:00</div>
+                    <button class="action-btn pass-btn" id="show-pass-btn" title="View Digital Access Pass">
+                        <i class="fa-solid fa-qrcode"></i>
+                        <span>SVS QR Pass</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- ============================================================ -->
+            <!-- MEMBER TAB 1: MEMBER DASHBOARD -->
+            <!-- ============================================================ -->
+            <section class="tab-content active" id="tab-dashboard">
+                <!-- Quick KPI Metric Cards -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon icon-flame">
+                            <i class="fa-solid fa-fire-flame-curved"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">Active Streak</span>
+                            <h3 id="dash-streak">14 <span>Days</span></h3>
+                            <span class="metric-sub positive">🔥 Top 5% at SVS Fitness</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon icon-dumbbell">
+                            <i class="fa-solid fa-dumbbell"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">Completed Workouts</span>
+                            <h3 id="dash-workouts">48 <span>Sessions</span></h3>
+                            <span class="metric-sub positive">↑ 4 sessions this week</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon icon-calories">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">Calories Burned</span>
+                            <h3 id="dash-calories">14,250 <span>kcal</span></h3>
+                            <span class="metric-sub">Monthly aggregate</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon icon-membership">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">Membership Status</span>
+                            <h3 class="tier-gold-text">ACTIVE</h3>
+                            <span class="metric-sub" id="dash-days-left">47 days remaining</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard 2-Column Section -->
+                <div class="dashboard-grid">
+                    <!-- Left: Weekly Activity & Quick Workout Logger -->
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-chart-simple"></i>
+                                <h3>SVS Gym Attendance & Training Volume</h3>
+                            </div>
+                            <span class="badge-accent">Target: 5 days/wk</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="attendance-bars">
+                                <div class="bar-col">
+                                    <div class="bar-fill filled" style="height: 85%;"><span>85m</span></div>
+                                    <span class="day-label">Mon</span>
+                                </div>
+                                <div class="bar-col">
+                                    <div class="bar-fill filled" style="height: 65%;"><span>65m</span></div>
+                                    <span class="day-label">Tue</span>
+                                </div>
+                                <div class="bar-col">
+                                    <div class="bar-fill" style="height: 20%;"><span>Rest</span></div>
+                                    <span class="day-label">Wed</span>
+                                </div>
+                                <div class="bar-col">
+                                    <div class="bar-fill filled" style="height: 90%;"><span>90m</span></div>
+                                    <span class="day-label">Thu</span>
+                                </div>
+                                <div class="bar-col">
+                                    <div class="bar-fill filled" style="height: 75%;"><span>75m</span></div>
+                                    <span class="day-label">Fri</span>
+                                </div>
+                                <div class="bar-col">
+                                    <div class="bar-fill filled" style="height: 50%;"><span>50m</span></div>
+                                    <span class="day-label">Sat</span>
+                                </div>
+                                <div class="bar-col">
+                                    <div class="bar-fill" style="height: 15%;"><span>Rest</span></div>
+                                    <span class="day-label">Sun</span>
+                                </div>
+                            </div>
+                            <div class="attendance-summary">
+                                <div class="summary-item">
+                                    <span class="dot-dot-active"></span>
+                                    <span>Workouts Completed: <strong>5 / 7 Days</strong></span>
+                                </div>
+                                <div class="summary-item">
+                                    <i class="fa-solid fa-trophy highlight-trophy"></i>
+                                    <span>Consistency Goal: <strong>92% Met</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Digital Gym Pass Card Preview -->
+                    <div class="card-glass member-pass-card">
+                        <div class="pass-chip-header">
+                            <div class="pass-logo">
+                                <i class="fa-solid fa-dumbbell"></i>
+                                <span>SVS FITNESS VIP</span>
+                            </div>
+                            <span class="pass-rfid"><i class="fa-solid fa-wifi"></i> RFID NFC</span>
+                        </div>
+                        <div class="pass-body">
+                            <div class="qr-box">
+                                <div class="qr-mock">
+                                    <i class="fa-solid fa-qrcode"></i>
+                                </div>
+                                <span class="qr-code-txt">SVS-MEMBER-8829-GOLD</span>
+                            </div>
+                            <div class="pass-details">
+                                <div class="detail-row">
+                                    <span class="d-label">MEMBER NAME</span>
+                                    <strong class="d-val">Alex Reynolds</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="d-label">TIER</span>
+                                    <strong class="d-val tier-gold-text">SVS Elite Gold VIP</strong>
+                                </div>
+                                <div class="detail-row">
+                                    <span class="d-label">ACCESS LEVEL</span>
+                                    <strong class="d-val">24/7 All-SVS Clubs</strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pass-footer">
+                            <span class="scan-hint"><i class="fa-solid fa-camera"></i> Scan at turnstile for entry</span>
+                            <span class="status-active-pill">● ACTIVE PASS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities & Upcoming Schedule -->
+                <div class="dashboard-secondary-grid">
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <h3>Recent Personal Bests & Logs</h3>
+                            </div>
+                            <button class="link-btn" onclick="switchTab('workout')">View All <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                        <div class="card-body">
+                            <div class="recent-list" id="dashboard-recent-workouts">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-calendar-day"></i>
+                                <h3>Today's SVS Group Classes</h3>
+                            </div>
+                            <button class="link-btn" onclick="switchTab('classes')">Book Now <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                        <div class="card-body">
+                            <div class="schedule-quick-list" id="dashboard-quick-classes">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- MEMBER TAB 2: WORKOUT PLANNER -->
+            <!-- ============================================================ -->
+            <section class="tab-content" id="tab-workout">
+                <div class="content-split-grid">
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-plus-circle"></i>
+                                <h3>Log Exercise & Workout Set</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form id="workout-form" class="custom-form">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-tag"></i> Target Muscle Group</label>
+                                    <select id="workout-group" class="form-input" required>
+                                        <option value="Chest">Chest (Pectorals)</option>
+                                        <option value="Back">Back (Lats & Rhomboids)</option>
+                                        <option value="Legs">Legs (Quads, Hamstrings, Calves)</option>
+                                        <option value="Shoulders">Shoulders (Deltoids)</option>
+                                        <option value="Arms">Arms (Biceps & Triceps)</option>
+                                        <option value="Core">Core & Abs</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-dumbbell"></i> Exercise Name</label>
+                                    <input type="text" id="workout-name" class="form-input" placeholder="e.g., Incline Barbell Press, Leg Press" required>
+                                </div>
+
+                                <div class="form-row-3">
+                                    <div class="form-group">
+                                        <label>Sets</label>
+                                        <input type="number" id="workout-sets" class="form-input" min="1" max="20" value="4" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Reps / Set</label>
+                                        <input type="number" id="workout-reps" class="form-input" min="1" max="100" value="10" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Weight (kg)</label>
+                                        <input type="number" id="workout-weight" class="form-input" min="0" step="0.5" value="80" required>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="primary-btn btn-block">
+                                    <i class="fa-solid fa-check"></i> Save & Log Workout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-medal"></i>
+                                <h3>Exercise History & Records</h3>
+                            </div>
+                            <span class="badge-accent" id="total-exercises-count">4 Logged</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Exercise</th>
+                                            <th>Target</th>
+                                            <th>Sets × Reps</th>
+                                            <th>Load (kg)</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="workout-history-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- MEMBER TAB 3: FITNESS CLASSES -->
+            <!-- ============================================================ -->
+            <section class="tab-content" id="tab-classes">
+                <div class="classes-filter-bar">
+                    <button class="filter-chip active" data-category="all">All SVS Classes</button>
+                    <button class="filter-chip" data-category="Strength">Strength</button>
+                    <button class="filter-chip" data-category="HIIT">HIIT</button>
+                    <button class="filter-chip" data-category="Yoga">Yoga</button>
+                    <button class="filter-chip" data-category="Spinning">Spinning</button>
+                </div>
+
+                <div class="classes-grid" id="classes-container"></div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- MEMBER TAB 4: DIET & NUTRITION -->
+            <!-- ============================================================ -->
+            <section class="tab-content" id="tab-diet">
+                <div class="macro-summary-grid">
+                    <div class="macro-card calories-card">
+                        <div class="macro-header">
+                            <span>Daily Calories</span>
+                            <i class="fa-solid fa-fire"></i>
+                        </div>
+                        <div class="macro-val"><span id="macro-calories">1,480</span> <small>/ 2,400 kcal</small></div>
+                        <div class="progress-track"><div class="progress-bar bar-cal" id="prog-cal" style="width: 61%;"></div></div>
+                    </div>
+
+                    <div class="macro-card protein-card">
+                        <div class="macro-header">
+                            <span>Protein</span>
+                            <i class="fa-solid fa-drumstick-bite"></i>
+                        </div>
+                        <div class="macro-val"><span id="macro-protein">132</span> <small>/ 180 g</small></div>
+                        <div class="progress-track"><div class="progress-bar bar-pro" id="prog-pro" style="width: 73%;"></div></div>
+                    </div>
+
+                    <div class="macro-card carbs-card">
+                        <div class="macro-header">
+                            <span>Carbohydrates</span>
+                            <i class="fa-solid fa-wheat-awn"></i>
+                        </div>
+                        <div class="macro-val"><span id="macro-carbs">169</span> <small>/ 250 g</small></div>
+                        <div class="progress-track"><div class="progress-bar bar-carb" id="prog-carb" style="width: 67%;"></div></div>
+                    </div>
+
+                    <div class="macro-card fats-card">
+                        <div class="macro-header">
+                            <span>Healthy Fats</span>
+                            <i class="fa-solid fa-droplet"></i>
+                        </div>
+                        <div class="macro-val"><span id="macro-fats">26</span> <small>/ 65 g</small></div>
+                        <div class="progress-track"><div class="progress-bar bar-fat" id="prog-fat" style="width: 40%;"></div></div>
+                    </div>
+                </div>
+
+                <div class="content-split-grid" style="margin-top: 1.5rem;">
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-utensils"></i>
+                                <h3>Log Meal & Macros</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form id="diet-form" class="custom-form">
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-clock"></i> Meal Type</label>
+                                    <select id="meal-type" class="form-input" required>
+                                        <option value="Breakfast">Breakfast</option>
+                                        <option value="Lunch">Lunch</option>
+                                        <option value="Dinner">Dinner</option>
+                                        <option value="Pre-Workout">Pre-Workout Snack</option>
+                                        <option value="Post-Workout">Post-Workout Shake</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-solid fa-bowl-food"></i> Food / Meal Description</label>
+                                    <input type="text" id="food-name" class="form-input" placeholder="e.g. Greek Yogurt with Honey & Almonds" required>
+                                </div>
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label>Calories (kcal)</label>
+                                        <input type="number" id="meal-calories" class="form-input" min="0" placeholder="350" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Protein (g)</label>
+                                        <input type="number" id="meal-protein" class="form-input" min="0" placeholder="25" required>
+                                    </div>
+                                </div>
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label>Carbs (g)</label>
+                                        <input type="number" id="meal-carbs" class="form-input" min="0" placeholder="40" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Fats (g)</label>
+                                        <input type="number" id="meal-fats" class="form-input" min="0" placeholder="10" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="primary-btn btn-block">
+                                    <i class="fa-solid fa-plus"></i> Add to Daily Diet Log
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-list-check"></i>
+                                <h3>Today's Food Journal</h3>
+                            </div>
+                            <span class="badge-accent">Live Sync</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Meal</th>
+                                            <th>Food Item</th>
+                                            <th>Calories</th>
+                                            <th>P / C / F (g)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="diet-log-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- MEMBER TAB 5: MEMBERSHIP PLANS -->
+            <!-- ============================================================ -->
+            <section class="tab-content" id="tab-plans">
+                <div class="plans-intro">
+                    <h2>SVS Fitness Membership Packages</h2>
+                    <p>Unlock state-of-the-art facilities, private coaching, and premium sauna recovery.</p>
+                </div>
+                <div class="plans-grid" id="plans-container"></div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- MEMBER TAB 6: CALCULATOR -->
+            <!-- ============================================================ -->
+            <section class="tab-content" id="tab-calculator">
+                <div class="calculator-grid">
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-calculator"></i>
+                                <h3>SVS Fitness Health & BMI / BMR Calculator</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <form id="calc-form" class="custom-form">
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label>Weight (kg)</label>
+                                        <input type="number" id="calc-weight" class="form-input" min="30" max="250" value="75" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Height (cm)</label>
+                                        <input type="number" id="calc-height" class="form-input" min="100" max="250" value="180" required>
+                                    </div>
+                                </div>
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label>Age (years)</label>
+                                        <input type="number" id="calc-age" class="form-input" min="12" max="100" value="26" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Gender</label>
+                                        <select id="calc-gender" class="form-input">
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Daily Activity Level</label>
+                                    <select id="calc-activity" class="form-input">
+                                        <option value="1.2">Sedentary (Little or no exercise)</option>
+                                        <option value="1.375">Lightly Active (1-3 days/week)</option>
+                                        <option value="1.55" selected>Moderately Active (3-5 days/week)</option>
+                                        <option value="1.725">Very Active (6-7 days/week)</option>
+                                        <option value="1.9">Super Active (Physical job + 2x training)</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="primary-btn btn-block" id="calc-compute-btn">
+                                    <i class="fa-solid fa-arrows-rotate"></i> Compute Fitness Metrics
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-heart-pulse"></i>
+                                <h3>Your Metabolic & Health Profile</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="calc-results-wrap">
+                                <div class="calc-score-box">
+                                    <span class="calc-label">Calculated BMI</span>
+                                    <h2 id="res-bmi">23.1</h2>
+                                    <span class="bmi-category normal" id="res-bmi-category">Normal Weight</span>
+                                </div>
+
+                                <div class="calc-metrics-row">
+                                    <div class="calc-mini-stat">
+                                        <span class="label">Basal Metabolic Rate (BMR)</span>
+                                        <h4 id="res-bmr">1,780 kcal/day</h4>
+                                        <small>Calories burned at total rest</small>
+                                    </div>
+                                    <div class="calc-mini-stat">
+                                        <span class="label">Total Daily Energy Expenditure (TDEE)</span>
+                                        <h4 id="res-tdee">2,759 kcal/day</h4>
+                                        <small>Maintenance calorie target</small>
+                                    </div>
+                                </div>
+
+                                <div class="calc-targets">
+                                    <h4>Suggested Daily Intake Goals:</h4>
+                                    <ul class="target-list">
+                                        <li><span>Fat Loss Target (-500 kcal):</span> <strong id="targ-loss">2,259 kcal</strong></li>
+                                        <li><span>Clean Muscle Gain (+300 kcal):</span> <strong id="targ-gain">3,059 kcal</strong></li>
+                                        <li><span>Recommended Daily Protein:</span> <strong id="targ-protein">150g - 165g</strong></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- OWNER TAB 1: OVERVIEW & REVENUE -->
+            <!-- ============================================================ -->
+            <section class="tab-content" id="tab-owner-dashboard">
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon icon-membership">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">Total Active Members</span>
+                            <h3>184 <span>Athletes</span></h3>
+                            <span class="metric-sub positive">↑ +18 this month</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon icon-calories">
+                            <i class="fa-solid fa-indian-rupee-sign"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">Monthly Revenue</span>
+                            <h3 class="tier-gold-text">₹3,42,800</h3>
+                            <span class="metric-sub positive">↑ 14.2% vs last month</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon icon-flame">
+                            <i class="fa-solid fa-door-open"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">Today's Check-ins</span>
+                            <h3>72 <span>Members</span></h3>
+                            <span class="metric-sub">Peak hours: 6 PM - 8 PM</span>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon icon-dumbbell">
+                            <i class="fa-solid fa-person-chalkboard"></i>
+                        </div>
+                        <div class="metric-data">
+                            <span class="metric-label">Active Trainers</span>
+                            <h3>8 <span>Coaches</span></h3>
+                            <span class="metric-sub positive">All certified</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-split-grid" style="margin-top: 1.5rem;">
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-chart-line"></i>
+                                <h3>SVS Fitness Membership Distribution</h3>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="plan-dist-list">
+                                <div class="dist-row">
+                                    <span>Elite Gold VIP (₹2,999/mo)</span>
+                                    <strong>82 members (44%)</strong>
+                                </div>
+                                <div class="dist-progress"><div style="width: 44%; background: var(--accent-gold); height: 8px; border-radius: 4px;"></div></div>
+
+                                <div class="dist-row" style="margin-top: 1rem;">
+                                    <span>Pro Silver (₹1,999/mo)</span>
+                                    <strong>68 members (37%)</strong>
+                                </div>
+                                <div class="dist-progress"><div style="width: 37%; background: var(--accent-cyan); height: 8px; border-radius: 4px;"></div></div>
+
+                                <div class="dist-row" style="margin-top: 1rem;">
+                                    <span>Starter Bronze (₹1,199/mo)</span>
+                                    <strong>34 members (19%)</strong>
+                                </div>
+                                <div class="dist-progress"><div style="width: 19%; background: var(--accent-primary); height: 8px; border-radius: 4px;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                                <h3>Live Turnstile Check-ins</h3>
+                            </div>
+                            <span class="badge-accent">Live Stream</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="recent-list">
+                                <div class="recent-item">
+                                    <div><strong>Alex Reynolds (Gold)</strong><div style="font-size: 0.75rem; color: var(--text-muted);">Card scanned at Main Gate</div></div>
+                                    <span style="color: var(--accent-green); font-size: 0.8rem; font-weight: 700;">2 mins ago</span>
+                                </div>
+                                <div class="recent-item">
+                                    <div><strong>Sneha Patel (Silver)</strong><div style="font-size: 0.75rem; color: var(--text-muted);">Zumba Studio Check-in</div></div>
+                                    <span style="color: var(--accent-green); font-size: 0.8rem; font-weight: 700;">14 mins ago</span>
+                                </div>
+                                <div class="recent-item">
+                                    <div><strong>Vikram Singh (Gold)</strong><div style="font-size: 0.75rem; color: var(--text-muted);">Free Weight Zone</div></div>
+                                    <span style="color: var(--accent-green); font-size: 0.8rem; font-weight: 700;">28 mins ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- OWNER TAB 2: MANAGE MEMBERS -->
+            <!-- ============================================================ -->
+            <section class="tab-content" id="tab-owner-members">
+                <div class="card-glass">
+                    <div class="card-header">
+                        <div class="header-with-icon">
+                            <i class="fa-solid fa-users-gear"></i>
+                            <h3>SVS Fitness Member Management Table</h3>
+                        </div>
+                        <button class="primary-btn" onclick="showToast('New Member Enrollment modal ready.')">
+                            <i class="fa-solid fa-user-plus"></i> Add New Member
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Member Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Plan Tier</th>
+                                        <th>Expiry Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Alex Reynolds</strong></td>
+                                        <td>alex.member@svsfitness.com</td>
+                                        <td>+91 98765 43210</td>
+                                        <td><span class="tier-pill tier-gold">Elite Gold</span></td>
+                                        <td>15 Oct 2026</td>
+                                        <td><span class="status-active-pill">ACTIVE</span></td>
+                                        <td><button class="link-btn" onclick="showToast('Alex\'s profile opened')">Edit</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Priya Sharma</strong></td>
+                                        <td>priya.s@svsfitness.com</td>
+                                        <td>+91 98451 12345</td>
+                                        <td><span class="tier-pill tier-gold">Pro Silver</span></td>
+                                        <td>02 Sep 2026</td>
+                                        <td><span class="status-active-pill">ACTIVE</span></td>
+                                        <td><button class="link-btn" onclick="showToast('Priya\'s profile opened')">Edit</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Rohan Verma</strong></td>
+                                        <td>rohan.v@svsfitness.com</td>
+                                        <td>+91 91234 56789</td>
+                                        <td><span class="tier-pill tier-gold">Starter Bronze</span></td>
+                                        <td>29 Aug 2026</td>
+                                        <td><span style="color: #ef4444; font-size:0.75rem; font-weight:700;">EXPIRING</span></td>
+                                        <td><button class="link-btn" onclick="showToast('Renewal alert sent to Rohan')">Renew</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Ananya Sen</strong></td>
+                                        <td>ananya.sen@svsfitness.com</td>
+                                        <td>+91 97890 54321</td>
+                                        <td><span class="tier-pill tier-gold">Elite Gold</span></td>
+                                        <td>22 Nov 2026</td>
+                                        <td><span class="status-active-pill">ACTIVE</span></td>
+                                        <td><button class="link-btn" onclick="showToast('Ananya\'s profile opened')">Edit</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- OWNER TAB 3: MANAGE CLASSES -->
+            <!-- ============================================================ -->
+            <section class="tab-content" id="tab-owner-classes">
+                <div class="card-glass">
+                    <div class="card-header">
+                        <div class="header-with-icon">
+                            <i class="fa-solid fa-calendar-plus"></i>
+                            <h3>SVS Studio Class Scheduling & Capacity</h3>
+                        </div>
+                        <button class="primary-btn" onclick="showToast('Create new class schedule')">
+                            <i class="fa-solid fa-plus"></i> Create New Class
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Class Name</th>
+                                        <th>Category</th>
+                                        <th>Assigned Trainer</th>
+                                        <th>Schedule / Day</th>
+                                        <th>Booked / Max Capacity</th>
+                                        <th>Room</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Heavy Iron Barbell Mastery</strong></td>
+                                        <td><span class="badge-accent">Strength</span></td>
+                                        <td>Coach Marcus Vance</td>
+                                        <td>Mon, 07:00 AM</td>
+                                        <td><strong>12 / 15</strong></td>
+                                        <td>Power Zone</td>
+                                        <td><span class="status-active-pill">SCHEDULED</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Metabolic Burn HIIT Inferno</strong></td>
+                                        <td><span class="badge-accent">HIIT</span></td>
+                                        <td>Coach Elena Rostova</td>
+                                        <td>Mon, 08:30 AM</td>
+                                        <td><strong>19 / 20</strong></td>
+                                        <td>Studio A</td>
+                                        <td><span class="status-active-pill">SCHEDULED</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Sunrise Vinyasa Yoga Flow</strong></td>
+                                        <td><span class="badge-accent">Yoga</span></td>
+                                        <td>Coach Elena Rostova</td>
+                                        <td>Wed, 06:30 AM</td>
+                                        <td><strong>14 / 25</strong></td>
+                                        <td>Zen Studio</td>
+                                        <td><span class="status-active-pill">SCHEDULED</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================ -->
+            <!-- OWNER TAB 4: BACKEND API & DATABASE ACCESS DOCS -->
+            <!-- ============================================================ -->
+            <section class="tab-content" id="tab-backend-docs">
+                <div class="content-split-grid">
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-terminal"></i>
+                                <h3>How to Run & Access Backend (Node.js/Express)</h3>
+                            </div>
+                            <span class="badge-accent">Port 5000</span>
+                        </div>
+                        <div class="card-body">
+                            <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">
+                                The backend is built using <strong>Node.js and Express REST APIs</strong>.
+                            </p>
+                            <div class="code-box">
+                                <span class="code-comment"># 1. Open Terminal and navigate to backend</span><br>
+                                <code>cd "c:\Users\HP\Desktop\web development\gym-portal\backend"</code><br><br>
+                                <span class="code-comment"># 2. Start the Express API server</span><br>
+                                <code>node server.js</code>
+                            </div>
+                            <h4 style="margin: 1.25rem 0 0.5rem 0; font-size: 0.95rem;">Available REST API Endpoints:</h4>
+                            <ul class="endpoint-list">
+                                <li><code>GET /api/health</code> - Test if server is running</li>
+                                <li><code>GET /api/member/profile</code> - Get current member info</li>
+                                <li><code>GET /api/classes</code> - List all fitness classes</li>
+                                <li><code>POST /api/classes/book</code> - Reserve or cancel a class slot</li>
+                                <li><code>GET /api/workouts</code> - Fetch workout logs & PR records</li>
+                                <li><code>POST /api/workouts</code> - Save a new workout set</li>
+                                <li><code>GET /api/diet</code> - Fetch today's calorie & macro totals</li>
+                                <li><code>POST /api/diet</code> - Log a new meal</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card-glass">
+                        <div class="card-header">
+                            <div class="header-with-icon">
+                                <i class="fa-solid fa-database"></i>
+                                <h3>How to Access MySQL Database</h3>
+                            </div>
+                            <span class="badge-accent">Database: gym_db</span>
+                        </div>
+                        <div class="card-body">
+                            <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">
+                                The database schema file is ready at <code>gym-portal/database/schema.sql</code>.
+                            </p>
+                            <div class="code-box">
+                                <span class="code-comment"># Import into MySQL Workbench or MySQL CLI:</span><br>
+                                <code>mysql -u root -p &lt; "c:\Users\HP\Desktop\web development\gym-portal\database\schema.sql"</code>
+                            </div>
+                            <h4 style="margin: 1.25rem 0 0.5rem 0; font-size: 0.95rem;">Key Relational Tables:</h4>
+                            <ul class="endpoint-list">
+                                <li><code>users</code> - Members, Trainers, and Owners (role-based)</li>
+                                <li><code>membership_plans</code> - Bronze, Silver, Gold VIP pricing & perks</li>
+                                <li><code>member_subscriptions</code> - Expiry dates & RFID/QR tokens</li>
+                                <li><code>fitness_classes</code> & <code>class_bookings</code> - Schedules & slots</li>
+                                <li><code>workout_sessions</code> & <code>workout_exercises</code> - Workout logs</li>
+                                <li><code>diet_logs</code> - Food, calories, protein, carbs, and fats</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- QR Pass Modal -->
+    <div class="modal-overlay" id="pass-modal">
+        <div class="modal-card">
+            <button class="modal-close" id="modal-close-btn">&times;</button>
+            <div class="modal-badge"><i class="fa-solid fa-shield-halved"></i> SVS SECURE ACCESS TOKEN</div>
+            <h3>SVS Fitness Turnstile Pass</h3>
+            <p>Hold this code 2-3 inches in front of the scanner at any SVS Fitness club.</p>
+            <div class="modal-qr-container">
+                <i class="fa-solid fa-qrcode modal-qr-icon"></i>
+            </div>
+            <div class="modal-member-meta">
+                <strong id="modal-member-name">Alex Reynolds</strong>
+                <span id="modal-token">ID: SVS-MEMBER-8829-GOLD</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Banner -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check" id="toast-icon"></i>
+        <span id="toast-msg">Action completed!</span>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
