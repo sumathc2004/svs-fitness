@@ -151,6 +151,7 @@ const state = {
 // Initialization
 // ============================================================================
 document.addEventListener('DOMContentLoaded', () => {
+  initRoleFromUrlOrStorage();
   initClock();
   initNavigation();
   initDashboard();
@@ -160,23 +161,16 @@ document.addEventListener('DOMContentLoaded', () => {
   initPlans();
   initCalculator();
   initModal();
-  checkBackendHealth();
 });
 
-// Check if Node.js Express server is active
-async function checkBackendHealth() {
-  const pill = document.getElementById('backend-status-pill');
-  const text = document.getElementById('backend-status-text');
-  try {
-    const res = await fetch('http://localhost:5000/api/health', { signal: AbortSignal.timeout(1500) });
-    if (res.ok) {
-      pill.style.background = 'rgba(16, 185, 129, 0.15)';
-      text.textContent = 'Backend Online (Port 5000)';
-    }
-  } catch (e) {
-    // Graceful offline fallback
-    text.textContent = 'Express Backend Ready (Port 5000)';
-  }
+// Check if user came from login.html with a specific role
+function initRoleFromUrlOrStorage() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const roleFromUrl = urlParams.get('role');
+  const roleFromStorage = localStorage.getItem('svs_user_role');
+
+  const selectedRole = roleFromUrl || roleFromStorage || 'member';
+  switchRole(selectedRole);
 }
 
 // Live Digital Clock
@@ -193,6 +187,7 @@ function initClock() {
 // Role Switcher: Member vs Owner / Admin
 window.switchRole = function(role) {
   state.currentRole = role;
+  localStorage.setItem('svs_user_role', role);
 
   const btnMember = document.getElementById('role-btn-member');
   const btnOwner = document.getElementById('role-btn-owner');
@@ -216,7 +211,6 @@ window.switchRole = function(role) {
     avatar.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80';
 
     switchTab('dashboard');
-    showToast('Switched to Member Mode: Alex Reynolds');
   } else {
     btnOwner.classList.add('active');
     btnMember.classList.remove('active');
@@ -230,7 +224,6 @@ window.switchRole = function(role) {
     avatar.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80';
 
     switchTab('owner-dashboard');
-    showToast('Switched to Owner Mode: SVS Fitness Management View');
   }
 };
 
@@ -265,15 +258,12 @@ window.switchTab = function(tabKey) {
   });
 
   const titles = {
-    // Member Tabs
     dashboard: { title: 'SVS Fitness Member Dashboard', sub: 'Welcome back, athlete! Track your progress and achieve your goals.' },
     workout: { title: 'Workout Planner & Exercise Tracker', sub: 'Log your sets, reps, and progressive overload records.' },
     classes: { title: 'SVS Fitness Classes & Trainer Booking', sub: 'Browse studio classes and secure your spot.' },
     diet: { title: 'Diet & Nutrition Calculator', sub: 'Hit your daily macros and fuel your muscle recovery.' },
     plans: { title: 'SVS Membership Subscription Plans', sub: 'Manage your gym tier and unlock premium amenities.' },
     calculator: { title: 'SVS Health, BMI & BMR Calculator', sub: 'Scientific body composition estimators for optimal nutrition.' },
-    
-    // Owner Tabs
     'owner-dashboard': { title: 'SVS Gym Owner Overview & Financials', sub: 'Real-time revenue, active attendance, and facility analytics.' },
     'owner-members': { title: 'Member Directory & Subscription Management', sub: 'Manage gym members, renewals, and access statuses.' },
     'owner-classes': { title: 'Class & Schedule Administration', sub: 'Create new class slots, manage instructors, and check bookings.' },

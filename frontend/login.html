@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVS FITNESS // Access Portal & Authentication</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Dedicated Login Page Styles */
+        .login-viewport {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(18, 25, 41, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            position: relative;
+        }
+
+        .auth-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .auth-brand .brand-logo {
+            width: 48px;
+            height: 48px;
+            font-size: 1.5rem;
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.85rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .auth-header p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Role Selector Tabs */
+        .auth-role-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: rgba(10, 14, 23, 0.7);
+            padding: 6px;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.75rem;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .auth-role-btn {
+            padding: 0.75rem;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 0.88rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .auth-role-btn.active {
+            background: var(--accent-primary);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255, 87, 34, 0.35);
+        }
+
+        .auth-role-btn.owner-active {
+            background: var(--accent-purple);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.35);
+        }
+
+        /* Quick Demo Fill Buttons */
+        .demo-accounts {
+            margin-top: 1.5rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .demo-accounts span {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .demo-btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .demo-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px dashed var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 6px;
+            font-size: 0.78rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .demo-pill:hover {
+            border-color: var(--accent-gold);
+            color: #fff;
+        }
+
+        .auth-footer {
+            margin-top: 1.75rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .auth-footer a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dynamic Ambient Glows -->
+    <div class="ambient-glow glow-top-left"></div>
+    <div class="ambient-glow glow-bottom-right"></div>
+    <div class="ambient-grid"></div>
+
+    <div class="login-viewport">
+        <div class="auth-card">
+            <!-- Brand Logo -->
+            <div class="auth-brand">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-dumbbell"></i>
+                </div>
+                <div class="brand-text">
+                    <h2>SVS <span>FITNESS</span></h2>
+                    <span class="portal-badge">SECURE ACCESS</span>
+                </div>
+            </div>
+
+            <div class="auth-header">
+                <h2 id="auth-title">Member Sign In</h2>
+                <p id="auth-sub">Enter your credentials or choose a quick demo account to enter.</p>
+            </div>
+
+            <!-- Role Selector: Member vs Owner -->
+            <div class="auth-role-tabs">
+                <button type="button" class="auth-role-btn active" id="tab-member" onclick="selectAuthRole('member')">
+                    <i class="fa-solid fa-user"></i> Gym Member
+                </button>
+                <button type="button" class="auth-role-btn" id="tab-owner" onclick="selectAuthRole('owner')">
+                    <i class="fa-solid fa-crown"></i> Gym Owner / Admin
+                </button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="custom-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label><i class="fa-solid fa-envelope"></i> Email Address</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="alex.member@svsfitness.com" value="alex.member@svsfitness.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fa-solid fa-lock"></i> Password</label>
+                    <input type="password" id="login-pass" class="form-input" placeholder="••••••••" value="password123" required>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: var(--text-secondary);">
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" checked> Remember me
+                    </label>
+                    <a href="#" style="color: var(--accent-cyan); text-decoration: none;" onclick="alert('Demo reset link simulated.')">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="primary-btn btn-block" id="login-submit-btn" style="margin-top: 0.5rem;">
+                    <i class="fa-solid fa-right-to-bracket"></i> Sign In to SVS Portal
+                </button>
+            </form>
+
+            <!-- 1-Click Demo Fillers -->
+            <div class="demo-accounts">
+                <span>⚡ Instant 1-Click Demo Access</span>
+                <div class="demo-btn-group">
+                    <button type="button" class="demo-pill" onclick="quickFill('member')">
+                        👤 Member (Alex)
+                    </button>
+                    <button type="button" class="demo-pill" onclick="quickFill('owner')">
+                        👑 Owner (Admin)
+                    </button>
+                </div>
+            </div>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="#" onclick="alert('Please contact SVS Fitness front desk or choose a membership tier on the portal!')">Sign Up / Join SVS</a></p>
+                <p style="margin-top: 8px;"><a href="index.html" style="color: var(--text-muted); font-size: 0.78rem;">← Go directly to portal without logging in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check" id="toast-icon"></i>
+        <span id="toast-msg">Signed in successfully!</span>
+    </div>
+
+    <script>
+        let currentRole = 'member';
+
+        function selectAuthRole(role) {
+            currentRole = role;
+            const tabMember = document.getElementById('tab-member');
+            const tabOwner = document.getElementById('tab-owner');
+            const title = document.getElementById('auth-title');
+            const sub = document.getElementById('auth-sub');
+            const submitBtn = document.getElementById('login-submit-btn');
+
+            if (role === 'member') {
+                tabMember.className = 'auth-role-btn active';
+                tabOwner.className = 'auth-role-btn';
+                title.textContent = 'Member Sign In';
+                sub.textContent = 'Access your workouts, QR pass, class schedules & diet logs.';
+                submitBtn.style.background = 'linear-gradient(135deg, var(--accent-primary), #e64a19)';
+                document.getElementById('login-email').value = 'alex.member@svsfitness.com';
+            } else {
+                tabOwner.className = 'auth-role-btn owner-active';
+                tabMember.className = 'auth-role-btn';
+                title.textContent = 'Owner & Admin Access';
+                sub.textContent = 'Manage SVS Fitness revenue, member subscriptions & facility schedules.';
+                submitBtn.style.background = 'linear-gradient(135deg, var(--accent-purple), #6d28d9)';
+                document.getElementById('login-email').value = 'owner@svsfitness.com';
+            }
+        }
+
+        function quickFill(role) {
+            selectAuthRole(role);
+            showToast(`Loaded ${role.toUpperCase()} credentials!`);
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            
+            // Save session role in LocalStorage
+            localStorage.setItem('svs_user_role', currentRole);
+            localStorage.setItem('svs_user_email', email);
+
+            showToast(`Authenticating as ${currentRole.toUpperCase()}...`);
+
+            setTimeout(() => {
+                window.location.href = `index.html?role=${currentRole}`;
+            }, 800);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+    </script>
+</body>
+</html>

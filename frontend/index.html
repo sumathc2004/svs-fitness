@@ -57,7 +57,7 @@
                 <div class="member-info">
                     <h4 id="sidebar-member-name">Alex Reynolds</h4>
                     <span class="tier-pill tier-gold" id="sidebar-tier-badge">
-                        <i class="fa-solid fa-crown"></i> Elite Gold Member
+                        <i class="fa-solid fa-crown"></i> SVS Elite Gold Member
                     </span>
                 </div>
             </div>
@@ -116,6 +116,11 @@
 
             <!-- Developer Path Badge & Info Footer -->
             <div class="sidebar-footer">
+                <div style="margin-bottom: 0.75rem;">
+                    <a href="login.html" class="link-btn" style="color: var(--text-muted); font-size: 0.8rem;">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i> Switch Account / Logout
+                    </a>
+                </div>
                 <div class="dev-path-box">
                     <div class="dev-tag"><i class="fa-solid fa-code"></i> SVS FITNESS FULL STACK</div>
                     <p>React/Next.js • Node/Express • MySQL</p>
@@ -139,6 +144,10 @@
                 </div>
 
                 <div class="header-actions">
+                    <a href="login.html" class="action-btn" style="text-decoration: none;" title="Sign in or change role">
+                        <i class="fa-solid fa-user-lock"></i>
+                        <span>Login Portal</span>
+                    </a>
                     <div class="backend-status-pill" id="backend-status-pill" title="Status of Node.js Express Backend">
                         <span class="pulse-dot"></span>
                         <span id="backend-status-text">Backend API (Port 5000)</span>
@@ -155,7 +164,6 @@
             <!-- MEMBER TAB 1: MEMBER DASHBOARD -->
             <!-- ============================================================ -->
             <section class="tab-content active" id="tab-dashboard">
-                <!-- Quick KPI Metric Cards -->
                 <div class="metrics-grid">
                     <div class="metric-card">
                         <div class="metric-icon icon-flame">
@@ -202,9 +210,7 @@
                     </div>
                 </div>
 
-                <!-- Dashboard 2-Column Section -->
                 <div class="dashboard-grid">
-                    <!-- Left: Weekly Activity & Quick Workout Logger -->
                     <div class="card-glass">
                         <div class="card-header">
                             <div class="header-with-icon">
@@ -257,7 +263,6 @@
                         </div>
                     </div>
 
-                    <!-- Right: Digital Gym Pass Card Preview -->
                     <div class="card-glass member-pass-card">
                         <div class="pass-chip-header">
                             <div class="pass-logo">
@@ -295,7 +300,6 @@
                     </div>
                 </div>
 
-                <!-- Recent Activities & Upcoming Schedule -->
                 <div class="dashboard-secondary-grid">
                     <div class="card-glass">
                         <div class="card-header">
@@ -306,9 +310,7 @@
                             <button class="link-btn" onclick="switchTab('workout')">View All <i class="fa-solid fa-arrow-right"></i></button>
                         </div>
                         <div class="card-body">
-                            <div class="recent-list" id="dashboard-recent-workouts">
-                                <!-- Populated dynamically by JS -->
-                            </div>
+                            <div class="recent-list" id="dashboard-recent-workouts"></div>
                         </div>
                     </div>
 
@@ -321,9 +323,7 @@
                             <button class="link-btn" onclick="switchTab('classes')">Book Now <i class="fa-solid fa-arrow-right"></i></button>
                         </div>
                         <div class="card-body">
-                            <div class="schedule-quick-list" id="dashboard-quick-classes">
-                                <!-- Populated dynamically by JS -->
-                            </div>
+                            <div class="schedule-quick-list" id="dashboard-quick-classes"></div>
                         </div>
                     </div>
                 </div>
@@ -422,7 +422,6 @@
                     <button class="filter-chip" data-category="Yoga">Yoga</button>
                     <button class="filter-chip" data-category="Spinning">Spinning</button>
                 </div>
-
                 <div class="classes-grid" id="classes-container"></div>
             </section>
 
@@ -818,15 +817,6 @@
                                         <td><span style="color: #ef4444; font-size:0.75rem; font-weight:700;">EXPIRING</span></td>
                                         <td><button class="link-btn" onclick="showToast('Renewal alert sent to Rohan')">Renew</button></td>
                                     </tr>
-                                    <tr>
-                                        <td><strong>Ananya Sen</strong></td>
-                                        <td>ananya.sen@svsfitness.com</td>
-                                        <td>+91 97890 54321</td>
-                                        <td><span class="tier-pill tier-gold">Elite Gold</span></td>
-                                        <td>22 Nov 2026</td>
-                                        <td><span class="status-active-pill">ACTIVE</span></td>
-                                        <td><button class="link-btn" onclick="showToast('Ananya\'s profile opened')">Edit</button></td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -898,7 +888,7 @@
             </section>
 
             <!-- ============================================================ -->
-            <!-- OWNER TAB 4: BACKEND API & DATABASE ACCESS DOCS -->
+            <!-- OWNER TAB 4: BACKEND DOCS -->
             <!-- ============================================================ -->
             <section class="tab-content" id="tab-backend-docs">
                 <div class="content-split-grid">
@@ -911,26 +901,11 @@
                             <span class="badge-accent">Port 5000</span>
                         </div>
                         <div class="card-body">
-                            <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">
-                                The backend is built using <strong>Node.js and Express REST APIs</strong>.
-                            </p>
                             <div class="code-box">
-                                <span class="code-comment"># 1. Open Terminal and navigate to backend</span><br>
-                                <code>cd "c:\Users\HP\Desktop\web development\gym-portal\backend"</code><br><br>
-                                <span class="code-comment"># 2. Start the Express API server</span><br>
+                                <span class="code-comment"># 1. Start the Express API server</span><br>
+                                <code>cd "c:\Users\HP\Desktop\web development\gym-portal\backend"</code><br>
                                 <code>node server.js</code>
                             </div>
-                            <h4 style="margin: 1.25rem 0 0.5rem 0; font-size: 0.95rem;">Available REST API Endpoints:</h4>
-                            <ul class="endpoint-list">
-                                <li><code>GET /api/health</code> - Test if server is running</li>
-                                <li><code>GET /api/member/profile</code> - Get current member info</li>
-                                <li><code>GET /api/classes</code> - List all fitness classes</li>
-                                <li><code>POST /api/classes/book</code> - Reserve or cancel a class slot</li>
-                                <li><code>GET /api/workouts</code> - Fetch workout logs & PR records</li>
-                                <li><code>POST /api/workouts</code> - Save a new workout set</li>
-                                <li><code>GET /api/diet</code> - Fetch today's calorie & macro totals</li>
-                                <li><code>POST /api/diet</code> - Log a new meal</li>
-                            </ul>
                         </div>
                     </div>
 
@@ -943,22 +918,10 @@
                             <span class="badge-accent">Database: gym_db</span>
                         </div>
                         <div class="card-body">
-                            <p style="color:var(--text-secondary); margin-bottom:1rem; font-size:0.9rem;">
-                                The database schema file is ready at <code>gym-portal/database/schema.sql</code>.
-                            </p>
                             <div class="code-box">
-                                <span class="code-comment"># Import into MySQL Workbench or MySQL CLI:</span><br>
+                                <span class="code-comment"># Import into MySQL Workbench:</span><br>
                                 <code>mysql -u root -p &lt; "c:\Users\HP\Desktop\web development\gym-portal\database\schema.sql"</code>
                             </div>
-                            <h4 style="margin: 1.25rem 0 0.5rem 0; font-size: 0.95rem;">Key Relational Tables:</h4>
-                            <ul class="endpoint-list">
-                                <li><code>users</code> - Members, Trainers, and Owners (role-based)</li>
-                                <li><code>membership_plans</code> - Bronze, Silver, Gold VIP pricing & perks</li>
-                                <li><code>member_subscriptions</code> - Expiry dates & RFID/QR tokens</li>
-                                <li><code>fitness_classes</code> & <code>class_bookings</code> - Schedules & slots</li>
-                                <li><code>workout_sessions</code> & <code>workout_exercises</code> - Workout logs</li>
-                                <li><code>diet_logs</code> - Food, calories, protein, carbs, and fats</li>
-                            </ul>
                         </div>
                     </div>
                 </div>
